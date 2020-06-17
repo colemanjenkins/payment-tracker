@@ -21,6 +21,8 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
         let displayValue = fieldValue;
         if (fieldName === "paid") {
             displayValue = fieldValue ? "Yes" : "No"
+        } else if (fieldName === "amount") {
+            displayValue = '$' + fieldValue;
         }
         return displayValue;
     }
@@ -70,6 +72,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
                         // <div>{fieldNames[ct]}: {fieldValue}</div>
                     })}
                     {!transaction.paid && <button onClick={() => handlePaidChange(true)}>Mark as Paid</button>}
+                    {transaction.paid && <button onClick={() => handlePaidChange(false)}>Mark as Unpaid</button>}
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         </div>
