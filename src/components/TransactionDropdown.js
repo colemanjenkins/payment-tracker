@@ -70,7 +70,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
                 >
                     <Typography className="heading">
                         <div className="topLevelInfo">
-                            {transaction.name} - {transaction.dateOccurred}
+                            {formatFieldValue("name", transaction.name)} - {formatFieldValue("dateOccurred", transaction.dateOccurred)}
                         </div>
                     </Typography>
                 </ExpansionPanelSummary>
