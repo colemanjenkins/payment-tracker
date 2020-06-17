@@ -8,21 +8,26 @@ import * as firebase from 'firebase'
 
 const displayName = {
     amount: "Amount",
-    comment: "Topics and Comment",
+    comment: "Comment",
     dateOccurred: "Date Charged",
     datePaid: "Date Paid",
     name: "Name",
-    paid: "Paid"
+    paid: "Paid",
+    topics: "Topics"
 }
 
 const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
 
     const formatFieldValue = (fieldName, fieldValue) => {
         let displayValue = fieldValue;
+        console.log(fieldValue + ": " + fieldValue.length)
         if (fieldName === "paid") {
             displayValue = fieldValue ? "Yes" : "No"
         } else if (fieldName === "amount") {
             displayValue = '$' + fieldValue;
+        } if (fieldName.length >= 4 && fieldValue !== "n/a" && fieldName.substring(0, 4) === "date") {
+            let date = new Date(fieldValue);
+            displayValue = date.toDateString();
         }
         return displayValue;
     }
@@ -40,8 +45,15 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     const handlePaidChange = (newPaid) => {
         const projects = firebase.database().ref('projects');
         const project = projects.child(projectKey + '/transactions/' + transactionKey);
+        // let newDatePaid = "n/a";
+        // if (newPaid) {
+        //     newDatePaid = new Date();
+        // }
+        const now = (new Date()).toDateString();
+        console.log(now)
         project.update({
-            paid: newPaid
+            paid: newPaid,
+            datePaid: newPaid ? now : "n/a"
         })
     }
 
