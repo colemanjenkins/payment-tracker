@@ -20,7 +20,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
 
     const formatFieldValue = (fieldName, fieldValue) => {
         let displayValue = fieldValue;
-        console.log(fieldValue + ": " + fieldValue.length)
+        // console.log(fieldValue + ": " + fieldValue.length)
         if (fieldName === "paid") {
             displayValue = fieldValue ? "Yes" : "No"
         } else if (fieldName === "amount") {
@@ -44,14 +44,15 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
 
     const handlePaidChange = (newPaid) => {
         const projects = firebase.database().ref('projects');
-        const project = projects.child(projectKey + '/transactions/' + transactionKey);
+        const transactions = projects.child(projectKey + "/transactions")
+        const transaction = transactions.child(transactionKey);
         // let newDatePaid = "n/a";
         // if (newPaid) {
         //     newDatePaid = new Date();
         // }
         const now = (new Date()).toDateString();
-        console.log(now)
-        project.update({
+        // console.log(now)
+        transaction.update({
             paid: newPaid,
             datePaid: newPaid ? now : "n/a"
         })
