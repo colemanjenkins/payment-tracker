@@ -104,7 +104,7 @@ const App = () => {
           projectKey={projectKey}
           transactionKey={keys[keyCount]} />
       })}
-      <button onClick={handleAddTransaction}>Create Session</button>
+      <button onClick={handleAddTransaction} disabled>Create Session</button>
     </div>
   );
 }
