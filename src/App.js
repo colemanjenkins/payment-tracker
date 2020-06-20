@@ -6,17 +6,33 @@ import TransactionDropdown from './components/TransactionDropdown';
 const App = () => {
   const [project, setProject] = useState(null);
   const [projectKey, setProjectKey] = useState(null);
+  const [keys, setKeys] = useState([])
 
   useEffect(() => {
     const projects = firebase.database().ref('projects');
     const project = projects.child('dummy');
     project.on('value', snap => {
+      sortTransactions(snap.val());
       setProject(snap.val());
-      console.log(snap.key)
+      // console.log(snap.key)
       setProjectKey(snap.key);
     })
     // setProject(child)
   }, [])
+
+  const sortTransactions = (projectData) => {
+    const sortField = "dateOccurred";
+    let orderedKeys = [];
+    if (projectData) {
+      orderedKeys = Object.keys(projectData.transactions);
+      orderedKeys.sort(function (a, b) {
+        const dateA = new Date(projectData.transactions[a][sortField]);
+        const dateB = new Date(projectData.transactions[b][sortField]);
+        return dateB - dateA;
+      })
+    }
+    setKeys(orderedKeys);
+  }
 
   const handleAddTransaction = () => {
     const projects = firebase.database().ref('projects');
@@ -88,8 +104,6 @@ const App = () => {
     return 0;
   }
 
-  let keyCount = -1;
-  const keys = project ? Object.keys(project.transactions) : [];
   return (
     <div className="App">
       <h1>{project ? project.name + " - " : ""} Dashboard</h1>
@@ -97,14 +111,13 @@ const App = () => {
         Total Due: ${calculateTotal()}
       </div>
       <button onClick={payAll}>Pay All</button>
-      {project && Object.values(project.transactions).map(transaction => {
-        keyCount++;
-        return <TransactionDropdown key={transaction}
-          transaction={transaction}
+      {project && keys.map(transactionKey => {
+        return <TransactionDropdown key={transactionKey}
+          transaction={project.transactions[transactionKey]}
           projectKey={projectKey}
-          transactionKey={keys[keyCount]} />
+          transactionKey={transactionKey} />
       })}
-      <button onClick={handleAddTransaction} disabled>Create Session</button>
+      <button onClick={handleAddTransaction}>Create Session</button>
     </div>
   );
 }

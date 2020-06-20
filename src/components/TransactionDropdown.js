@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -17,6 +17,8 @@ const displayName = {
 }
 
 const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
+    const [editing, setEditing] = useState(false);
+    const [editObject, setEditObject] = useState({});
 
     const formatFieldValue = (fieldName, fieldValue) => {
         let displayValue = fieldValue;
@@ -32,34 +34,67 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
         return displayValue;
     }
 
-    const chooseFieldColor = () => {
-        let color;
-        if (!transaction.paid) {
-            color = "#F00"
-        } else {
-            color = "#0F0"
-        }
-        return color
-    }
-
     const handlePaidChange = (newPaid) => {
         const projects = firebase.database().ref('projects');
         const transactions = projects.child(projectKey + "/transactions")
         const transaction = transactions.child(transactionKey);
-        // let newDatePaid = "n/a";
-        // if (newPaid) {
-        //     newDatePaid = new Date();
-        // }
         const now = (new Date()).toDateString();
-        // console.log(now)
         transaction.update({
             paid: newPaid,
             datePaid: newPaid ? now : "n/a"
         })
     }
 
-    let ct = -1;
-    const fieldNames = Object.keys(transaction)
+    const handleDeleteTransaction = (e) => {
+        if (!window.confirm("Are you sure you want to delete this transaction"))
+            return;
+        const event = e;
+        const projects = firebase.database().ref('projects');
+        const transactions = projects.child(projectKey + "/transactions")
+        const transaction = transactions.child(transactionKey);
+        transaction.remove();
+    }
+
+    const handleEdit = () => {
+        setEditing(true);
+        // console.log({ ...transaction })
+        setEditObject({ ...transaction })
+    }
+
+    const updateEditObject = (e, fieldName) => {
+        e.persist();
+        console.log("trying to edit i guess")
+        // const data = e;
+        // const field = fieldName;
+        // console.log({ ...editObject, [field]: data.target.value })
+        // setEditObject({ ...editObject, [field]: data })
+    }
+
+    const handleStopEdit = (save) => {
+        if (!save && !window.confirm("Are you sure you want to discard your changes?"))
+            return;
+        setEditing(false);
+        if (save) {
+            const projects = firebase.database().ref('projects');
+            const transactions = projects.child(projectKey + "/transactions")
+            const transaction = transactions.child(transactionKey);
+            // transaction.update(editObject);
+        } else {
+
+        }
+    }
+
+    const getInputType = (fieldName) => {
+        let type = "";
+        switch (fieldName) {
+            case "amount":
+                type = "number"
+                break;
+        }
+        console.log(type)
+        return type;
+    }
+
     return (
         <div>
             <ExpansionPanel >
@@ -67,25 +102,33 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    style={{ color: chooseFieldColor() }}
+                    style={{ color: transaction.paid ? "#0F0" : "#F00" }}
                 >
-                    <Typography className="heading">
-                        <div className="topLevelInfo">
-                            {formatFieldValue("name", transaction.name)} - {formatFieldValue("dateOccurred", transaction.dateOccurred)}
-                        </div>
-                    </Typography>
+                    <div className="topLevelInfo">
+                        {formatFieldValue("name", transaction.name)} - {formatFieldValue("dateOccurred", transaction.dateOccurred)}
+                    </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className="panel" style={{ display: "block" }}>
-                    {Object.values(transaction).map(fieldValue => {
-                        ct++;
-                        const fieldName = fieldNames[ct];
+                    {Object.keys(transaction).map(fieldName => {
+                        const value = formatFieldValue(fieldName, transaction[fieldName]);
+                        const type = getInputType(fieldName)
                         return (
-                            <div key={fieldName}>{displayName[fieldName] ? displayName[fieldName] : fieldName}: {formatFieldValue(fieldName, fieldValue)}</div>
+                            <div key={fieldName}>
+                                {displayName[fieldName] ? displayName[fieldName] : fieldName}:
+                                {!editing && <>{" " + value}</>}
+                                {editing && <input type={type}
+                                    value={transaction[fieldName]}
+                                    onChange={(e) => setEditObject(e, fieldName)} />}
+                            </div>
                         )
                         // <div>{fieldNames[ct]}: {fieldValue}</div>
                     })}
                     {!transaction.paid && <button onClick={() => handlePaidChange(true)}>Mark as Paid</button>}
                     {transaction.paid && <button onClick={() => handlePaidChange(false)}>Mark as Unpaid</button>}
+                    <button onClick={handleDeleteTransaction}>Delete Transaction</button>
+                    {!editing && <button onClick={handleEdit}>Edit</button>}
+                    {editing && <button onClick={() => handleStopEdit(true)}>Save Edits</button>}
+                    {editing && <button onClick={() => handleStopEdit(false)}>Discard Changes</button>}
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         </div>
