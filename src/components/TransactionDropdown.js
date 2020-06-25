@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import * as firebase from 'firebase'
 
@@ -18,7 +18,8 @@ const displayName = {
 
 const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     const [editing, setEditing] = useState(false);
-    const [editObject, setEditObject] = useState({});
+    // const [editObject, setEditObject] = useState({});
+    const setEditObject = useState({})[1];
 
     const formatFieldValue = (fieldName, fieldValue) => {
         let displayValue = fieldValue;
@@ -48,7 +49,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     const handleDeleteTransaction = (e) => {
         if (!window.confirm("Are you sure you want to delete this transaction"))
             return;
-        const event = e;
+        // const event = e;
         const projects = firebase.database().ref('projects');
         const transactions = projects.child(projectKey + "/transactions")
         const transaction = transactions.child(transactionKey);
@@ -61,23 +62,23 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
         setEditObject({ ...transaction })
     }
 
-    const updateEditObject = (e, fieldName) => {
-        e.persist();
-        console.log("trying to edit i guess")
-        // const data = e;
-        // const field = fieldName;
-        // console.log({ ...editObject, [field]: data.target.value })
-        // setEditObject({ ...editObject, [field]: data })
-    }
+    // const updateEditObject = (e, fieldName) => {
+    //     e.persist();
+    //     console.log("trying to edit i guess")
+    //     // const data = e;
+    //     // const field = fieldName;
+    //     // console.log({ ...editObject, [field]: data.target.value })
+    //     // setEditObject({ ...editObject, [field]: data })
+    // }
 
     const handleStopEdit = (save) => {
         if (!save && !window.confirm("Are you sure you want to discard your changes?"))
             return;
         setEditing(false);
         if (save) {
-            const projects = firebase.database().ref('projects');
-            const transactions = projects.child(projectKey + "/transactions")
-            const transaction = transactions.child(transactionKey);
+            // const projects = firebase.database().ref('projects');
+            // const transactions = projects.child(projectKey + "/transactions")
+            // const transaction = transactions.child(transactionKey);
             // transaction.update(editObject);
         } else {
 
@@ -89,6 +90,8 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
         switch (fieldName) {
             case "amount":
                 type = "number"
+                break;
+            default:
                 break;
         }
         console.log(type)
