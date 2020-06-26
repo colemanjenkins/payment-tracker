@@ -35,7 +35,6 @@ const App = () => {
   const handleAddTransaction = () => {
     const project = firebase.database().ref('projects/' + projectKey);
     const transactions = project.child("transactions");
-    const now = (new Date()).toString();
 
     project.once('value').then(snap => {
       let newTransaction = snap.val().defaultTransaction;
