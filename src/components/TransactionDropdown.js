@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import * as firebase from 'firebase'
 
@@ -22,9 +21,8 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
 
     const formatFieldValue = (fieldName, fieldValue) => {
         let displayValue = fieldValue;
-        // console.log(fieldValue + ": " + fieldValue.length)
         if (fieldName === "paid") {
-            displayValue = fieldValue ? "Yes" : "No"
+            displayValue = fieldValue ? "Yes" : "No";
         } else if (fieldName === "amount") {
             displayValue = '$' + fieldValue;
         } if (fieldName.length >= 4 && fieldValue !== "n/a" && fieldName.substring(0, 4) === "date") {
@@ -38,17 +36,17 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
         const projects = firebase.database().ref('projects');
         const transactions = projects.child(projectKey + "/transactions")
         const transaction = transactions.child(transactionKey);
-        const now = (new Date()).toDateString();
+        const now = (new Date()).toString();
+
         transaction.update({
             paid: newPaid,
             datePaid: newPaid ? now : "n/a"
         })
     }
 
-    const handleDeleteTransaction = (e) => {
+    const handleDeleteTransaction = () => {
         if (!window.confirm("Are you sure you want to delete this transaction"))
             return;
-        const event = e;
         const projects = firebase.database().ref('projects');
         const transactions = projects.child(projectKey + "/transactions")
         const transaction = transactions.child(transactionKey);
@@ -57,44 +55,49 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
 
     const handleEdit = () => {
         setEditing(true);
-        // console.log({ ...transaction })
         setEditObject({ ...transaction })
     }
 
-    const updateEditObject = (e, fieldName) => {
-        e.persist();
-        console.log("trying to edit i guess")
-        // const data = e;
-        // const field = fieldName;
-        // console.log({ ...editObject, [field]: data.target.value })
-        // setEditObject({ ...editObject, [field]: data })
+    const updateEditObject = (e, fieldName, type) => {
+        const data = e;
+        const field = fieldName;
+
+        let val = data.target.value;
+        if (type === "number")
+            val = Number(val);
+
+        setEditObject({ ...editObject, [field]: val })
     }
 
     const handleStopEdit = (save) => {
         if (!save && !window.confirm("Are you sure you want to discard your changes?"))
             return;
+
         setEditing(false);
+
         if (save) {
             const projects = firebase.database().ref('projects');
             const transactions = projects.child(projectKey + "/transactions")
             const transaction = transactions.child(transactionKey);
-            // transaction.update(editObject);
-        } else {
-
+            transaction.update(editObject);
         }
     }
 
     const getInputType = (fieldName) => {
-        let type = "";
+        let type;
         switch (fieldName) {
             case "amount":
                 type = "number"
                 break;
+            default:
+                type = "text"
+                break;
         }
-        console.log(type)
         return type;
     }
 
+    if (!transaction)
+        return <div></div>;
     return (
         <div>
             <ExpansionPanel >
@@ -117,8 +120,8 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
                                 {displayName[fieldName] ? displayName[fieldName] : fieldName}:
                                 {!editing && <>{" " + value}</>}
                                 {editing && <input type={type}
-                                    value={transaction[fieldName]}
-                                    onChange={(e) => setEditObject(e, fieldName)} />}
+                                    value={editObject[fieldName]}
+                                    onChange={(e) => updateEditObject(e, fieldName, type)} />}
                             </div>
                         )
                         // <div>{fieldNames[ct]}: {fieldValue}</div>

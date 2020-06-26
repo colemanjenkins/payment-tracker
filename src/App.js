@@ -14,10 +14,8 @@ const App = () => {
     project.on('value', snap => {
       sortTransactions(snap.val());
       setProject(snap.val());
-      // console.log(snap.key)
       setProjectKey(snap.key);
     })
-    // setProject(child)
   }, [])
 
   const sortTransactions = (projectData) => {
@@ -35,18 +33,17 @@ const App = () => {
   }
 
   const handleAddTransaction = () => {
-    const projects = firebase.database().ref('projects');
-    const transactions = projects.child(projectKey + "/transactions");
-    const now = (new Date()).toDateString();
-    transactions.push({
-      amount: 25,
-      comment: "comment here lol",
-      dateOccurred: now,
-      datePaid: "n/a",
-      name: "Tutoring Riley",
-      paid: false,
-      topics: "Distributive Property, Exponents"
+    const project = firebase.database().ref('projects/' + projectKey);
+    const transactions = project.child("transactions");
+    const now = (new Date()).toString();
+
+    project.once('value').then(snap => {
+      let newTransaction = snap.val().defaultTransaction;
+      if (newTransaction.dateOccurred === "now")
+        newTransaction.dateOccurred = (new Date()).toString();
+      transactions.push(newTransaction)
     })
+
   }
 
   const payTransactions = (transactionKeys) => {
@@ -55,7 +52,7 @@ const App = () => {
 
     for (let i = 0; i < transactionKeys.length; i++) {
       const transaction = transactions.child(transactionKeys[i]);
-      const now = (new Date()).toDateString();
+      const now = (new Date()).toString();
       transaction.update({
         paid: true,
         datePaid: now
