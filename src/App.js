@@ -10,7 +10,7 @@ const App = () => {
 
   useEffect(() => {
     const projects = firebase.database().ref('projects');
-    const project = projects.child('dummy');
+    const project = projects.child('-MAi71AwrAqMf5VecbjI');
     project.on('value', snap => {
       sortTransactions(snap.val());
       setProject(snap.val());
@@ -42,7 +42,6 @@ const App = () => {
         newTransaction.dateOccurred = (new Date()).toString();
       transactions.push(newTransaction)
     })
-
   }
 
   const payTransactions = (transactionKeys) => {
