@@ -3,7 +3,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import * as firebase from 'firebase'
+import { withFirebase } from './Firebase';
+
 
 const displayName = {
     amount: "Amount",
@@ -33,12 +34,13 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     }
 
     const handlePaidChange = (newPaid) => {
-        const projects = firebase.database().ref('projects');
-        const transactions = projects.child(projectKey + "/transactions")
-        const transaction = transactions.child(transactionKey);
+        // const projects = firebase.database().ref('projects');
+        // const transactions = projects.child(projectKey + "/transactions")
+        // const transaction = transactions.child(transactionKey);
+
         const now = (new Date()).toString();
 
-        transaction.update({
+        transaction(projectKey, transactionKey).update({
             paid: newPaid,
             datePaid: newPaid ? now : "n/a"
         })
