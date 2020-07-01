@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import TransactionDropdown from './TransactionDropdown.js';
 import { withFirebase } from '../Firebase'
 
-const Dashboard = () => {
+const Dashboard = props => {
     const [project, setProject] = useState(null);
     const [projectKey, setProjectKey] = useState(null);
     const [keys, setKeys] = useState([])
 
     useEffect(() => {
-        // const projects = firebase.database().ref('projects');
-        // const project = projects.child('-MAi71AwrAqMf5VecbjI');
-        project('-MAi71AwrAqMf5VecbjI').on('value', snap => {
+        const { firebase } = props;
+        firebase.project('-MAi71AwrAqMf5VecbjI').on('value', snap => {
             sortTransactions(snap.val());
             setProject(snap.val());
             setProjectKey(snap.key);
@@ -32,25 +31,20 @@ const Dashboard = () => {
     }
 
     const handleAddTransaction = () => {
-        // const project = firebase.database().ref('projects/' + projectKey);
-        // const transactions = project.child("transactions");
-
-        project(projectKey).once('value').then(snap => {
+        const { firebase } = props;
+        firebase.project(projectKey).once('value').then(snap => {
             let newTransaction = snap.val().defaultTransaction;
             if (newTransaction.dateOccurred === "now")
                 newTransaction.dateOccurred = (new Date()).toString();
-            transactions().push(newTransaction)
+            firebase.transactions().push(newTransaction)
         })
     }
 
     const payTransactions = (transactionKeys) => {
-        // const projects = firebase.database().ref('projects');
-        // const transactions = projects.child(projectKey + "/transactions");
-
+        const { firebase } = props;
         for (let i = 0; i < transactionKeys.length; i++) {
-            // const transaction = transactions.child(transactionKeys[i]);
             const now = (new Date()).toString();
-            transaction(projectKey, transactionKeys[i]).update({
+            firebase.transaction(projectKey, transactionKeys[i]).update({
                 paid: true,
                 datePaid: now
             })
@@ -100,7 +94,7 @@ const Dashboard = () => {
 
     return (
         <div className="App">
-            {/* <h1>{project ? project.name + " - " : ""} Dashboard</h1>
+            <h1>{project ? project.name + " - " : ""} Dashboard</h1>
             <div>
                 Total Due: ${calculateTotal()}
             </div>
@@ -111,9 +105,9 @@ const Dashboard = () => {
                     projectKey={projectKey}
                     transactionKey={transactionKey} />
             })}
-            <button onClick={handleAddTransaction}>Create Session</button> */}
+            <button onClick={handleAddTransaction}>Create Session</button>
         </div>
     );
 }
 
-export default Dashboard;
+export default withFirebase(Dashboard);

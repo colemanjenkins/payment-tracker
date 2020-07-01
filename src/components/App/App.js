@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Dashboard from '../Dashboard/Dashboard.js';
+import { withFirebase } from '../Firebase'
 
 const App = () => {
 
@@ -11,4 +12,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default withFirebase(App);

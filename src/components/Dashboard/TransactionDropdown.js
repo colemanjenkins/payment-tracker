@@ -16,7 +16,7 @@ const displayName = {
     topics: "Topics"
 }
 
-const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
+const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase }) => {
     const [editing, setEditing] = useState(false);
     const [editObject, setEditObject] = useState({});
 
@@ -34,13 +34,9 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     }
 
     const handlePaidChange = (newPaid) => {
-        // const projects = firebase.database().ref('projects');
-        // const transactions = projects.child(projectKey + "/transactions")
-        // const transaction = transactions.child(transactionKey);
-
         const now = (new Date()).toString();
 
-        transaction(projectKey, transactionKey).update({
+        firebase.transaction(projectKey, transactionKey).update({
             paid: newPaid,
             datePaid: newPaid ? now : "n/a"
         })
@@ -49,10 +45,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     const handleDeleteTransaction = () => {
         if (!window.confirm("Are you sure you want to delete this transaction"))
             return;
-        const projects = firebase.database().ref('projects');
-        const transactions = projects.child(projectKey + "/transactions")
-        const transaction = transactions.child(transactionKey);
-        transaction.remove();
+        firebase.transaction(projectKey, transactionKey).remove();
     }
 
     const handleEdit = () => {
@@ -78,10 +71,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
         setEditing(false);
 
         if (save) {
-            const projects = firebase.database().ref('projects');
-            const transactions = projects.child(projectKey + "/transactions")
-            const transaction = transactions.child(transactionKey);
-            transaction.update(editObject);
+            firebase.transaction(projectKey, transactionKey).update(editObject);
         }
     }
 
@@ -140,4 +130,4 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey }) => {
     )
 }
 
-export default TransactionDropdown
+export default withFirebase(TransactionDropdown)
