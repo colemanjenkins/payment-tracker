@@ -14,7 +14,7 @@ const Dashboard = props => {
             setProject(snap.val());
             setProjectKey(snap.key);
         })
-    }, [])
+    }, [props])
 
     const sortTransactions = (projectData) => {
         const sortField = "dateOccurred";
