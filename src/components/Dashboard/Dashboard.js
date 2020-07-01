@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import TransactionDropdown from './TransactionDropdown';
-import { withFirebase } from './Firebase'
+import TransactionDropdown from './TransactionDropdown.js';
+import { withFirebase } from '../Firebase'
 
 const Dashboard = () => {
     const [project, setProject] = useState(null);
