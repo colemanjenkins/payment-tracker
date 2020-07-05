@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import TransactionDropdown from './TransactionDropdown.js';
 import { withFirebase } from '../Firebase'
+import ProjectHeader from './ProjectHeader'
+import './Dashboard.css'
 
 const Dashboard = props => {
     const [project, setProject] = useState(null);
@@ -94,18 +96,24 @@ const Dashboard = props => {
 
     return (
         <div className="App">
-            <h1>{project ? project.name + " - " : ""} Dashboard</h1>
-            <div>
-                Total Due: ${calculateTotal()}
+            <ProjectHeader name={project ? project.name : ""} />
+            <div className="DashboardBody">
+                <div style={{ flex: 1 }}>
+                    <div>
+                        Total Due: ${calculateTotal()}
+                    </div>
+                    <button onClick={payAll}>Pay All</button>
+                    <button onClick={handleAddTransaction}>Create Session</button>
+                </div>
+                <div style={{ flex: 2, marginTop: "15px", overflow: 'scroll' }}>
+                    {project && keys.map(transactionKey => {
+                        return <TransactionDropdown key={transactionKey}
+                            transaction={project.transactions[transactionKey]}
+                            projectKey={projectKey}
+                            transactionKey={transactionKey} />
+                    })}
+                </div>
             </div>
-            <button onClick={payAll}>Pay All</button>
-            {project && keys.map(transactionKey => {
-                return <TransactionDropdown key={transactionKey}
-                    transaction={project.transactions[transactionKey]}
-                    projectKey={projectKey}
-                    transactionKey={transactionKey} />
-            })}
-            <button onClick={handleAddTransaction}>Create Session</button>
         </div>
     );
 }

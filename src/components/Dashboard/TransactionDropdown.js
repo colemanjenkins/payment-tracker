@@ -5,6 +5,8 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withFirebase } from '../Firebase';
 
+import './TransactionDropdown.css';
+
 
 const displayName = {
     amount: "Amount",
@@ -91,16 +93,21 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase
     if (!transaction)
         return <div></div>;
     return (
-        <div>
-            <ExpansionPanel >
+        <div style={{ margin: "0 15px 5px 15px" }}>
+            <ExpansionPanel style={{ backgroundColor: "#506680" }}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    style={{ color: transaction.paid ? "#0F0" : "#F00" }}
+                    style={{ color: transaction.paid ? "" : "#962334" }}
                 >
                     <div className="topLevelInfo">
-                        {formatFieldValue("name", transaction.name)} - {formatFieldValue("dateOccurred", transaction.dateOccurred)}
+                        <div className="PanelTitle">
+                            {formatFieldValue("name", transaction.name)}
+                        </div>
+                        <div className="PanelSubtitle">
+                            {formatFieldValue("dateOccurred", transaction.dateOccurred)}
+                        </div>
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className="panel" style={{ display: "block" }}>
