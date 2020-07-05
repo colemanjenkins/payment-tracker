@@ -33,10 +33,12 @@ const Dashboard = props => {
     const handleAddTransaction = () => {
         const { firebase } = props;
         firebase.project(projectKey).once('value').then(snap => {
+            // console.log(snap.val())
             let newTransaction = snap.val().defaultTransaction;
+            console.log(newTransaction)
             if (newTransaction.dateOccurred === "now")
                 newTransaction.dateOccurred = (new Date()).toString();
-            firebase.transactions().push(newTransaction)
+            firebase.transactions(projectKey).push(newTransaction)
         })
     }
 
