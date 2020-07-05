@@ -99,10 +99,9 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    style={{ color: transaction.paid ? "" : "#962334" }}
                 >
-                    <div className="topLevelInfo">
-                        <div className="PanelTitle">
+                    <div className={"topLevelInfo"}>
+                        <div className={"PanelTitle" + (transaction.paid ? " paid" : " notPaid")}>
                             {formatFieldValue("name", transaction.name)}
                         </div>
                         <div className="PanelSubtitle">
@@ -116,7 +115,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase
                         const type = getInputType(fieldName)
                         return (
                             <div key={fieldName}>
-                                {displayName[fieldName] ? displayName[fieldName] : fieldName}:
+                                <b>{displayName[fieldName] ? displayName[fieldName] : fieldName}:</b>
                                 {!editing && <>{" " + value}</>}
                                 {editing && <input type={type}
                                     value={editObject[fieldName]}

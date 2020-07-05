@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TransactionDropdown from './TransactionDropdown.js';
 import { withFirebase } from '../Firebase'
 import ProjectHeader from './ProjectHeader'
+import DollarAmountDisplay from './DollarAmountDisplay'
 import './Dashboard.css'
 
 const Dashboard = props => {
@@ -101,9 +102,7 @@ const Dashboard = props => {
             <ProjectHeader name={project ? project.name : ""} />
             <div className="DashboardBody">
                 <div style={{ flex: 1 }}>
-                    <div>
-                        Total Due: ${calculateTotal()}
-                    </div>
+                    <DollarAmountDisplay title="Total Due" amount={calculateTotal()} />
                     <button onClick={payAll}>Pay All</button>
                     <button onClick={handleAddTransaction}>Create Session</button>
                 </div>

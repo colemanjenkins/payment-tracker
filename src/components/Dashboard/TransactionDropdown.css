@@ -6,3 +6,12 @@
     font-size: 15px;
     color: #CCC;
 }
+
+.notPaid {
+    color: #460010;
+    font-weight: bold;
+}
+
+.paid {
+    color: #66cc99;
+}
