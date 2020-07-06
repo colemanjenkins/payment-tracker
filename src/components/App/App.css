@@ -14,9 +14,11 @@ html {
 
 .App {
   margin: 0;
-  position: fixed;
+  /* position: fixed; */
   width: 100%;
   overflow: scroll;
-  /* min-height: 100vh; */
   font-family: 'Nanum Gothic', sans-serif;
-}
+} 
+
+
+  /* min-height: 100vh; */

@@ -8,10 +8,20 @@
 }
 
 .notPaid {
-    color: #460010;
+    color: #700010;
     font-weight: bold;
 }
 
 .paid {
     color: #66cc99;
+}
+
+@media screen and (max-width: 400px) {
+    .PanelTitle {
+        font-size: 15px;
+    }
+
+    .PanelSubtitle {
+        font-size: 10px;
+    }
 }

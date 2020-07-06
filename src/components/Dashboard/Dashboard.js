@@ -4,6 +4,7 @@ import { withFirebase } from '../Firebase'
 import ProjectHeader from './ProjectHeader'
 import DollarAmountDisplay from './DollarAmountDisplay'
 import './Dashboard.css'
+import { Button } from '@material-ui/core';
 
 const Dashboard = props => {
     const [project, setProject] = useState(null);
@@ -36,9 +37,7 @@ const Dashboard = props => {
     const handleAddTransaction = () => {
         const { firebase } = props;
         firebase.project(projectKey).once('value').then(snap => {
-            // console.log(snap.val())
             let newTransaction = snap.val().defaultTransaction;
-            console.log(newTransaction)
             if (newTransaction.dateOccurred === "now")
                 newTransaction.dateOccurred = (new Date()).toString();
             firebase.transactions(projectKey).push(newTransaction)
@@ -87,7 +86,6 @@ const Dashboard = props => {
         if (project) {
             const transactions = Object.values(project.transactions);
             let total = 0;
-
             for (let i = 0; i < transactions.length; i++) {
                 if (!transactions[i].paid)
                     total += transactions[i].amount
@@ -98,15 +96,17 @@ const Dashboard = props => {
     }
 
     return (
-        <div className="App">
+        <div >
             <ProjectHeader name={project ? project.name : ""} />
             <div className="DashboardBody">
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, marginLeft: "15px" }}>
                     <DollarAmountDisplay title="Total Due" amount={calculateTotal()} />
-                    <button onClick={payAll}>Pay All</button>
-                    <button onClick={handleAddTransaction}>Create Session</button>
+                    <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap" }}>
+                        <Button onClick={payAll} style={{ backgroundColor: "#506680", margin: "0 5px 5px 0" }}>Pay All</Button>
+                        <Button onClick={handleAddTransaction} style={{ backgroundColor: "#506680", margin: "0 5px 5px 0" }}>Create Session</Button>
+                    </div>
                 </div>
-                <div style={{ flex: 2, marginTop: "15px", overflow: 'scroll' }}>
+                <div style={{ flex: 2, overflow: 'scroll', height: 69 * 7 }}> {/* height of one (single line) transaction is 69 px*/}
                     {project && keys.map(transactionKey => {
                         return <TransactionDropdown key={transactionKey}
                             transaction={project.transactions[transactionKey]}

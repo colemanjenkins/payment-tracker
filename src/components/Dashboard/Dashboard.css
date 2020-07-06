@@ -1,5 +1,10 @@
 .DashboardBody {
-    margin-top: 100px;
+    margin-top: 95px;
     display: flex;
-    overflow: scroll;
+}
+
+@media screen and (max-width: 500px) {
+    .DashboardBody {
+        margin-top: 75px;
+    }
 }
