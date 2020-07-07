@@ -7,6 +7,10 @@
     color: #CCC;
 }
 
+.Dropdown {
+    margin-bottom: 5px;
+}
+
 .notPaid {
     color: #700010;
     font-weight: bold;
@@ -16,6 +20,14 @@
     color: #66cc99;
 }
 
+.amountDisplay {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: #CCC;
+    font-size: 15px;
+}
+
 @media screen and (max-width: 400px) {
     .PanelTitle {
         font-size: 15px;
@@ -23,5 +35,11 @@
 
     .PanelSubtitle {
         font-size: 10px;
+    }
+
+    .amountDisplay {
+        font-size: 10px;
+        /* justify-content: flex-end */
+        /* padding-top: 5px; */
     }
 }

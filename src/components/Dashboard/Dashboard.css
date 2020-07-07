@@ -1,6 +1,16 @@
 .DashboardBody {
-    margin-top: 95px;
+    /* margin-top: 95px; */
+    margin: 95px 15px 15px 15px;
     display: flex;
+    flex-wrap: wrap;
+    flex-basis: 5px
+}
+
+.Buttons {
+    display:flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    margin-bottom: 5px
 }
 
 @media screen and (max-width: 500px) {

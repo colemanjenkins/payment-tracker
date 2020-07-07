@@ -90,22 +90,36 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase
         return type;
     }
 
+    const formatAmount = (amount) => {
+        let cents = String(Math.round((amount * 100) % 100));
+        if (cents.length === 1) {
+            cents = "0" + cents;
+        }
+        const dollars = (Math.floor(amount / 1)).toLocaleString();
+        return dollars + "." + cents;
+    }
+
     if (!transaction)
         return <div></div>;
     return (
-        <div style={{ margin: "0 15px 5px 15px" }}>
+        <div className="Dropdown">
             <ExpansionPanel style={{ backgroundColor: "#506680" }}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <div className={"topLevelInfo"}>
-                        <div className={"PanelTitle" + (transaction.paid ? " paid" : " notPaid")}>
-                            {formatFieldValue("name", transaction.name)}
+                    <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                        <div className={"topLevelInfo"} >
+                            <div className={"PanelTitle" + (transaction.paid ? " paid" : " notPaid")}>
+                                {formatFieldValue("name", transaction.name)}
+                            </div>
+                            <div className="PanelSubtitle">
+                                {formatFieldValue("dateOccurred", transaction.dateOccurred)}
+                            </div>
                         </div>
-                        <div className="PanelSubtitle">
-                            {formatFieldValue("dateOccurred", transaction.dateOccurred)}
+                        <div className="amountDisplay">
+                            ${formatAmount(transaction.amount)}
                         </div>
                     </div>
                 </ExpansionPanelSummary>

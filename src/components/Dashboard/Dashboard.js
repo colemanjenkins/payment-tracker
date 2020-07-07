@@ -72,7 +72,8 @@ const Dashboard = props => {
             }
         }
 
-        const confirmed = window.confirm("Are you sure you want to pay " + payList.length + " transactions for $" + paidValue + "?");
+        const confirmed = window.confirm("Are you sure you want to pay "
+            + payList.length + " transactions for $" + paidValue + "?");
 
         if (confirmed) {
             payTransactions(payList);
@@ -99,14 +100,21 @@ const Dashboard = props => {
         <div >
             <ProjectHeader name={project ? project.name : ""} />
             <div className="DashboardBody">
-                <div style={{ flex: 1, marginLeft: "15px" }}>
+                <div style={{ flex: 1 }}>
                     <DollarAmountDisplay title="Total Due" amount={calculateTotal()} />
-                    <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap" }}>
-                        <Button onClick={payAll} style={{ backgroundColor: "#506680", margin: "0 5px 5px 0" }}>Pay All</Button>
-                        <Button onClick={handleAddTransaction} style={{ backgroundColor: "#506680", margin: "0 5px 5px 0" }}>Create Session</Button>
+                    <div className="Buttons">
+                        <Button onClick={payAll}
+                            style={{ backgroundColor: "#506680", marginRight: "5px", flexGrow: 1, flexBasis: "5px" }}>
+                            Pay All
+                            </Button>
+                        <Button onClick={handleAddTransaction}
+                            style={{ backgroundColor: "#506680", flexGrow: 1.5, flexBasis: "5px" }}>
+                            Create Session
+                            </Button>
                     </div>
                 </div>
-                <div style={{ flex: 2, overflow: 'scroll', height: 69 * 7 }}> {/* height of one (single line) transaction is 69 px*/}
+                <div style={{ flex: 2, overflowY: 'scroll', minWidth: "255px", height: 69 * 7 }}>
+                    {/* height of one (single line) transaction is 69 px*/}
                     {project && keys.map(transactionKey => {
                         return <TransactionDropdown key={transactionKey}
                             transaction={project.transactions[transactionKey]}
