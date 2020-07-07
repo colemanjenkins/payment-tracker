@@ -13,8 +13,19 @@
     margin-bottom: 5px
 }
 
+.Transactions {
+    flex: 2;
+    overflow-y: scroll;
+    min-width: 255px;
+    height: 483px;
+    margin-left: 15px
+}
+
 @media screen and (max-width: 500px) {
     .DashboardBody {
         margin-top: 75px;
+    }
+    .Transactions {
+        margin-left: 0;
     }
 }

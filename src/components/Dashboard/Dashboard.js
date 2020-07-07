@@ -113,7 +113,7 @@ const Dashboard = props => {
                             </Button>
                     </div>
                 </div>
-                <div style={{ flex: 2, overflowY: 'scroll', minWidth: "255px", height: 69 * 7 }}>
+                <div className="Transactions">
                     {/* height of one (single line) transaction is 69 px*/}
                     {project && keys.map(transactionKey => {
                         return <TransactionDropdown key={transactionKey}
