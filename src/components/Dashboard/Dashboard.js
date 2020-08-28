@@ -109,7 +109,7 @@ const Dashboard = props => {
                             </Button>
                         <Button onClick={handleAddTransaction}
                             style={{ backgroundColor: "#506680", flexGrow: 1.5, flexBasis: "5px" }}>
-                            Create Session
+                            Create Expense
                             </Button>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ const displayName = {
     datePaid: "Date Paid",
     name: "Name",
     paid: "Paid",
-    topics: "Topics"
+    topics: "More Info"
 }
 
 const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase }) => {
