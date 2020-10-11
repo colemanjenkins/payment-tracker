@@ -91,7 +91,7 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase
     }
 
     const formatAmount = (amount) => {
-        let cents = String(Math.round((amount * 100) % 100));
+        let cents = String(Math.abs(Math.round((amount * 100) % 100)));
         if (cents.length === 1) {
             cents = "0" + cents;
         }

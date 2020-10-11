@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 
 const DollarAmountDisplay = ({ title, amount }) => {
     const classes = useStyles();
-    let cents = String(Math.round((amount * 100) % 100));
+    let cents = String(Math.abs(Math.round((amount * 100) % 100)));
     if (cents.length === 1) {
         cents = "0" + cents;
     }
