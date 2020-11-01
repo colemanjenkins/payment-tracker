@@ -22,7 +22,9 @@ const DollarAmountDisplay = ({ title, amount }) => {
     if (cents.length === 1) {
         cents = "0" + cents;
     }
-    const dollars = (Math.floor(amount / 1)).toLocaleString();
+    let dollars = (Math.floor(amount)).toLocaleString();
+    if (amount < 0)
+        dollars = (Math.ceil(amount)).toLocaleString();
     const textColor = dollars === "0" && cents === "00" ? "#66cc99" : "";
     return (
         <div style={{ margin: "0 0 5px 0" }}>
