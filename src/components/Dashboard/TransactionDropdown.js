@@ -95,7 +95,9 @@ const TransactionDropdown = ({ transaction, projectKey, transactionKey, firebase
         if (cents.length === 1) {
             cents = "0" + cents;
         }
-        const dollars = (Math.floor(amount / 1)).toLocaleString();
+        let dollars = (Math.floor(amount)).toLocaleString();
+        if (amount < 0)
+            dollars = (Math.ceil(amount)).toLocaleString();
         return dollars + "." + cents;
     }
 
